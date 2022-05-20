@@ -4,14 +4,14 @@
 // import Form from './Form';
 import ContactList from './ContactList';
 import Spinner from './Spinner/Spinner';
-// import Filter from './Filter';
+import Filter from './Filter';
 import './container.css';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import { useSelector } from 'react-redux';
 // import { addItems, deleteItems, updateFilter } from '../redux/store';
 // import { addItems, deleteItems } from '../redux/itemsSlice';
-// import ()
-// import { updateFilter } from '../redux/filterSlice';
+// import { updateFilter } from '../redux/store';
+import { updateFilter } from '../redux/filterSlice';
 import { useFetchContactsQuery } from 'redux/itemsSlice';
 // const initialContacts = [
 //   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -30,13 +30,13 @@ export default function App() {
   // const { items } = useSelector(state => state.items);
   // console.log(items);
   // а до фільтра ми не добавляли персист, тому тут не деструктуризуємо
-  // const value = useSelector(state => state.filter);
+  const value = useSelector(state => state.filter);
   // console.log(value);
   // useEffect(() => {
   //   window.localStorage.setItem('contacts', JSON.stringify(contacts));
   // }, [contacts]);
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { data: contacts, isFetching } = useFetchContactsQuery();
 
   // const addContact = ({ name, number }) => {
@@ -51,20 +51,20 @@ export default function App() {
   //   setContacts([contact, ...contacts]);
   // };
 
-  // const changeFilter = e => {
-  //   dispatch(updateFilter(e.currentTarget.value));
-  //   // setFilter(e.currentTarget.value);
-  // };
+  const changeFilter = e => {
+    dispatch(updateFilter(e.currentTarget.value));
+    // setFilter(e.currentTarget.value);
+  };
 
-  // const getVisibleContacts = () => {
-  //   // const { contacts, filter } = this.state;
-  //   const normalizedFilter = value.toLowerCase();
-  //   //  return contacts.filter(contact =>
-  //   // console.log(items);
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(normalizedFilter)
-  //   );
-  // };
+  const getVisibleContacts = () => {
+    // const { contacts, filter } = this.state;
+    const normalizedFilter = value.toLowerCase();
+    //  return contacts.filter(contact =>
+    // console.log(items);
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
 
   // const deleteContact = contactId => {
   //   // console.log(contactId);
@@ -76,15 +76,17 @@ export default function App() {
   return (
     <div className="Container">
       <h1>Phonebook</h1>
+      {isFetching && <Spinner />}
+      {/* {contacts && <ContactList contacts={contacts} />} */}
       {/* <Form onSubmit={addContact} /> */}
       {/* <Form onSubmit={contact => dispatch(addItems(contact))} /> */}
       <h2> Contacts : </h2>
       {/* <Filter value={filter} onChange={changeFilter} /> */}
-      {/* <Filter value={value} onChange={changeFilter} /> */}
-      {isFetching && <Spinner />}
+      <Filter value={value} onChange={changeFilter} />
+
       {contacts && (
         <ContactList
-          contacts={contacts}
+          contacts={getVisibleContacts()}
           // onDeleteContactList={deleteContact}
         />
       )}
