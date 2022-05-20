@@ -5,22 +5,23 @@ import {
   List,
   ContactListItem,
   ContactListNumber,
-  ContactListButton,
+  // ContactListButton,
 } from './ContactList.styled';
 
-const ContactList = ({ contacts, onDeleteContactList }) => (
+// const ContactList = ({ contacts, onDeleteContactList }) => (
+const ContactList = ({ contacts }) => (
   <List>
-    {contacts.map(({ id, name, number }) => (
+    {contacts.map(({ id, name, poone }) => (
       <ContactListItem key={id}>
         <p>
-          {name} : <ContactListNumber> {number} </ContactListNumber>
+          {name} : <ContactListNumber> {poone} </ContactListNumber>
         </p>
-        <ContactListButton
+        {/* <ContactListButton
           type="button"
           onClick={() => onDeleteContactList(id)}
         >
           Удалить
-        </ContactListButton>
+        </ContactListButton> */}
       </ContactListItem>
     ))}
   </List>

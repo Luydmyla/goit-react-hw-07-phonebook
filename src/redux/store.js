@@ -1,33 +1,37 @@
 // import { createStore } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
+// import { contactsApi } from './itemsSlice';
+
 // ВИКОРИСТОВУЄМО БІБЛІОТЕКУ персіст для роботи з локалсторидж
 // import { persistStore, persistReducer } from 'redux-persist';
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+// import {
+//   persistStore,
+//   persistReducer,
+//   FLUSH,
+//   REHYDRATE,
+//   PAUSE,
+//   PERSIST,
+//   PURGE,
+//   REGISTER,
+// } from 'redux-persist';
+// import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 // import { createReducer, createAction } from '@reduxjs/toolkit';
-import { createAction } from '@reduxjs/toolkit';
+// import { createAction } from '@reduxjs/toolkit';
 // import { nanoid } from 'nanoid';
-import { itemsSlice } from '../redux/itemsSlice';
+// /import { itemsSlice } from '../redux/itemsSlice';
 import { filterSlice } from './filterSlice';
+import { contactsApi } from './itemsSlice';
 // конфігурація персисту
-const persistConfig = {
-  key: 'root',
-  storage,
-};
+// const persistConfig = {
+//   key: 'root',
+//   storage,
+// };
 
 // створюю дїї (action) для додавання, видалення та пошуку контактів
-export const addItems = createAction('items/addItems');
-export const deleteItems = createAction('items/deleteItems');
-export const updateFilter = createAction('filter/updateFilter');
+// export const addItems = createAction('items/addItems');
+// export const deleteItems = createAction('items/deleteItems');
+// export const updateFilter = createAction('filter/updateFilter');
 
 //ДВА ВАРІНТИ - ЧЕРЕЗ createReducer - (ЗАКОМЕНТОВАНО)
 // І ЧЕРЕЗ Slice
@@ -61,23 +65,25 @@ export const updateFilter = createAction('filter/updateFilter');
 //   [updateFilter]: (state, action) => action.payload,
 // });
 // створюємо персист редюсер для айтемсів, який звязаний з локал сториджем
-const persistedItemsReducer = persistReducer(persistConfig, itemsSlice.reducer);
+// const persistedItemsReducer = persistReducer(persistConfig, itemsSlice.reducer);
 
 // створюю сховище стор , яке зберігає стан нашого додатку та методи роботи з ним (редюсери) -функціі, які реагують на дії
 export const store = configureStore({
   reducer: {
     // items: itemsReducer,
     // items: itemsSlice.reducer,
-    items: persistedItemsReducer,
+    // items: persistedItemsReducer,
     // filter: filterReducer,
+    [contactsApi.reducerPath]: contactsApi.reducer,
     filter: filterSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+    // getDefaultMiddleware({
+    //   serializableCheck: {
+    //     ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    //   },
+    //  }),
+    [...getDefaultMiddleware(), contactsApi.middleware],
 });
-
-export const persistor = persistStore(store);
+setupListeners(store.dispatch);
+// export const persistor = persistStore(store);
