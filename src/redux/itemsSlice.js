@@ -40,17 +40,17 @@
 //       // або ж ми використали персист для запису в локалсторидж
 //     },
 //     // функція для видалення контакту за його айді
-//     deleteItems: (state, action) => {
+// deleteItems: (state, action) => {
 //       // console.log(state.items);
-//       const contactId = action.payload;
+// const contactId = action.payload;
 //       // console.log(contactId);
-//       // const filterContact = state.filter(contact => contact.id !== contactId);
+// const filterContact = state.filter(contact => contact.id !== contactId);
 //       state.items = state.items.filter(contact => contact.id !== contactId);
 //       // тут теж записуємо в локалсторидж контакти, які залишились після видалення
 //       // window.localStorage.setItem('contacts', JSON.stringify(filterContact));
 //       // або виклристати персист
-//       // return { items: filterContact };
-//     },
+// return { items: filterContact };
+// },
 //   },
 // });
 // // Action creators are generated for each case reducer function
@@ -68,32 +68,33 @@ export const contactsApi = createApi({
   }),
   tagTypes: ['Contact'],
   endpoints: builder => ({
+    // фетч - чтобі забиать на бекенді все що е
     fetchContacts: builder.query({
       query: () => '/contacts',
       providesTags: ['Contact'],
     }),
-    // deleteTodo: builder.mutation({
-    //   query: todoId => ({
-    //     url: `/todos/${todoId}`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: ['Todo'],
-    // }),
-    //   createTodo: builder.mutation({
-    //     query: todoContent => ({
-    //       url: '/todos',
-    //       method: 'POST',
-    //       body: {
-    //         content: todoContent,
-    //       },
-    //     }),
-    //     invalidatesTags: ['Todo'],
-    //   }),
+    // для видалення контакту
+    deleteContacts: builder.mutation({
+      query: contactId => ({
+        url: `/contacts/${contactId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Contact'],
+    }),
+    // для ствоення контакту
+    createContacts: builder.mutation({
+      query: body => ({
+        url: '/contacts',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Contact'],
+    }),
   }),
 });
 
 export const {
   useFetchContactsQuery,
-  // useDeleteTodoMutation,
-  // useCreateTodoMutation,
+  useDeleteContactsMutation,
+  useCreateContactsMutation,
 } = contactsApi;

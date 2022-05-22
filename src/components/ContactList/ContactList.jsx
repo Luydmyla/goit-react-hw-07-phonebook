@@ -5,33 +5,33 @@ import {
   List,
   ContactListItem,
   ContactListNumber,
-  // ContactListButton,
+  ContactListName,
+  Contact,
+  ContactListButton,
 } from './ContactList.styled';
 
 // const ContactList = ({ contacts, onDeleteContactList }) => (
-const ContactList = ({ contacts }) => (
+const ContactList = ({ contacts, onDeleteContact }) => (
   <List>
-    {contacts.map(({ id, name, poone }) => (
+    {contacts.map(({ name, phone, id }) => (
       <ContactListItem key={id}>
-        <p>
-          {name} : <ContactListNumber> {poone} </ContactListNumber>
-        </p>
-        {/* <ContactListButton
-          type="button"
-          onClick={() => onDeleteContactList(id)}
-        >
-          Удалить
-        </ContactListButton> */}
+        <Contact>
+          <ContactListName> {name} : </ContactListName>
+          <ContactListNumber> {phone} </ContactListNumber>
+        </Contact>
+        <ContactListButton type="button" onClick={() => onDeleteContact(id)}>
+          Delete
+        </ContactListButton>
       </ContactListItem>
     ))}
   </List>
 );
 ContactList.propTypes = {
   contacts: PropTypes.arrayOf(
-    PropTypes.exact({
+    PropTypes.shape({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
     })
   ),
 };

@@ -6,17 +6,17 @@ import PropTypes from 'prop-types';
 
 export default function Form(props) {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
   // console.log(name);
-  // console.log(number);
+  // console.log(phone);
   const handleChange = event => {
     const { name, value } = event.currentTarget;
     switch (name) {
       case 'name':
         setName(value);
         break;
-      case 'number':
-        setNumber(value);
+      case 'phone':
+        setPhone(value);
         break;
       default:
         return;
@@ -26,13 +26,13 @@ export default function Form(props) {
   const handleSubmit = e => {
     e.preventDefault();
     // console.log(name, number);
-    props.onSubmit({ name, number });
+    props.onSubmit({ name, phone });
     resetForm();
   };
 
   const resetForm = () => {
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -54,8 +54,8 @@ export default function Form(props) {
         Number :
         <FormInput
           type="tel"
-          name="number"
-          value={number}
+          name="phone"
+          value={phone}
           onChange={handleChange}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
